@@ -1,4 +1,4 @@
-package com.denversc.impri.app
+package impri.app
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.denversc.impri.app.ui.theme.ImpriTheme
+import impri.app.ui.theme.ImpriTheme
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 

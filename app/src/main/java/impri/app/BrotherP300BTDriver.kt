@@ -1,4 +1,4 @@
-package com.denversc.impri.app
+package impri.app
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter

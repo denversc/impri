@@ -1,4 +1,4 @@
-package com.denversc.impri.app
+package impri.app
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
