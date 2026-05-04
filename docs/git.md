@@ -2,6 +2,10 @@
 
 This file documents items specific to interacting with this git repository via the git command line.
 
+## Staging and Committing Policy
+
+**DO NOT stage or commit changes to git unless explicitly asked to do so.** By default, all modifications must be left unstaged in the working directory.
+
 ## Git Commit Message Specification
 
 When creating git commit messages in this repository, the following format MUST be strictly adhered to:
