@@ -1,4 +1,4 @@
-package com.denversc.bropro
+package com.denversc.impri.app
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.denversc.bropro.ui.theme.BroProTheme
+import com.denversc.impri.app.ui.theme.ImpriTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BroProTheme {
+            ImpriTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

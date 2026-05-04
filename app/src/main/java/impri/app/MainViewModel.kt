@@ -1,4 +1,4 @@
-package com.denversc.bropro
+package com.denversc.impri.app
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

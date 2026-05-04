@@ -1,4 +1,4 @@
-package com.denversc.bropro
+package com.denversc.impri.app
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter

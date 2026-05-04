@@ -1,6 +1,6 @@
-# BroPro Label Printer App
+# Impri Label Printer App
 
-BroPro is an Android application built with Jetpack Compose designed to create and print custom labels via Bluetooth to a Brother PT-P300BT thermal label maker.
+Impri is an Android application built with Jetpack Compose designed to create and print custom labels via Bluetooth to a Brother PT-P300BT thermal label maker.
 
 ## Features
 

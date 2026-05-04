@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "BroPro"
+rootProject.name = "Impri"
 include(":app")
  

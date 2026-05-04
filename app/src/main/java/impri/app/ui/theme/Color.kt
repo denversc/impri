@@ -1,4 +1,4 @@
-package com.denversc.bropro.ui.theme
+package com.denversc.impri.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

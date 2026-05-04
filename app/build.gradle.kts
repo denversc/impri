@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-  namespace = "com.denversc.bropro"
+  namespace = "impri.app"
   compileSdk {
     version = release(36) {
       minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "com.denversc.bropro"
+    applicationId = "impri.app"
     minSdk = 36
     targetSdk = 36
     versionCode = 1
