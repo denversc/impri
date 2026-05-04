@@ -1,0 +1,102 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  pull_request:
+  schedule:
+    - cron: '0 11 * * *' # Run nightly at 11am UTC (3am Pacific, 6am Eastern)
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+    run:
+      shell: bash
+
+jobs:
+  build:
+    continue-on-error: false
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          show-progress: false
+
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: 25
+          distribution: temurin
+
+      - name: Restore Gradle Cache
+        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
+        if: github.event_name != 'schedule'
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-z8nasm5z3z-${{ github.run_id }}
+          restore-keys: |
+            gradle-cache-z8nasm5z3z-
+
+      - name: assembleDebug
+        run: ./gradlew --warning-mode all assembleDebug
+
+      - name: Save Gradle Cache
+        uses: actions/cache/save@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
+        if: github.event_name == 'schedule'
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-z8nasm5z3z-${{ github.run_id }}
+
+  format:
+    continue-on-error: false
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          show-progress: false
+
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: 25
+          distribution: temurin
+
+      - name: Restore Gradle Cache
+        uses: actions/cache/restore@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
+        if: github.event_name != 'schedule'
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-achxw8vq63-${{ github.run_id }}
+          restore-keys: |
+            gradle-cache-achxw8vq63-
+
+      - name: spotlessCheck
+        run: ./gradlew --warning-mode all spotlessCheck
+
+      - name: Save Gradle Cache
+        uses: actions/cache/save@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
+        if: github.event_name == 'schedule'
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-achxw8vq63-${{ github.run_id }}
+
+  actionlintyml:
+    continue-on-error: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          show-progress: false
+          sparse-checkout: '.github/'
+      - uses: docker://index.docker.io/rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9 # ratchet:docker://rhysd/actionlint:1.7.7
+        with:
+          args: -color /github/workspace/.github/workflows/dataconnect.yml
