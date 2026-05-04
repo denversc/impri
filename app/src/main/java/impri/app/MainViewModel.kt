@@ -72,10 +72,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val effectiveQrConfig = settings.qrConfig.copy(placement = placement)
 
-    val willPrintQr =
-      effectiveQrConfig.placement != QrPlacement.NONE &&
-        (if (effectiveQrConfig.useCustomContent) effectiveQrConfig.customContent else cleanText)
-          .isNotBlank()
+    val willPrintQr = effectiveQrConfig.placement != QrPlacement.NONE
 
     if (cleanText.isBlank() && !willPrintQr) {
       _preview.value = null
@@ -122,9 +119,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     colorMode: ColorMode = ColorMode.NORMAL,
     qrConfig: QrConfig = QrConfig(),
   ) {
-    val willPrintQr =
-      qrConfig.placement != QrPlacement.NONE &&
-        (if (qrConfig.useCustomContent) qrConfig.customContent else text).isNotBlank()
+    val willPrintQr = qrConfig.placement != QrPlacement.NONE
 
     if (text.isBlank() && !willPrintQr) {
       _status.value = "Cannot print empty label"
