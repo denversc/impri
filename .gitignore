@@ -6,4 +6,4 @@
 .gradle
 .DS_Store
 local.properties
-.gemini/
+.gemini/worktrees
