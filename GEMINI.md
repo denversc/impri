@@ -1,28 +1,37 @@
-# Miscellaneous scripts and configuration files
+# Impri Label Printer Android Application
 
-This git repository contains personal configuration files and scripts.
+This git repository contains an Android application called "Impri" which
+connects to consumer Brother label makers via Bluetooth to print labels.
 
-## Repository contents
+This application is an alternative to the official, proprietary Android
+application from Brother. This application focuses on a faster application with
+improved user experience and better features.
 
-This section provides a high-level overview of the files and directories in this repository.
+## Code Compilation
 
-### Zsh init scripts
+After completing a task that involves changes to any files in the "src" directory
+you **MUST** verify that the code compiles by running
+`./gradlew compileDebugSources`.
 
-The following files are used as the init scripts for the zsh shell:
+Prefer running the `compileDebugSources` task over the more conventional
+`assembleDebug` task because the latter does a whole bunch of extra work beyond
+just verifying that the code compiles, such as bundling the application into an
+APK file.
 
-* `zprofile.zsh`
-  * sourced from ~/.zprofile
-  * initializes environment variables that may be overridden by subshells
-* `zshenv.zsh`
-  * sourced from ~/.zshenv
-  * sets XDG environment variables (e.g. XDG_DATA_HOME, XDG_CONFIG_HOME)
-  * prepends ~/.local/bin to the path
-* `zshrc.zsh`
-  * sourced from ~/.zshrc
-  * adds utility functions like "say", "good", "bad", and "mkd"
-  * sets up a fancy prompt, key bindings, competions, and the like
+## Code Formatting
 
-## Git information
+After completing a task that involves changes to any files that are formatted by
+the "spotless" plugin as configured in ./build.gradle.kts you **MUST** run
+`./gradlew spotlessApply` to format the code.
 
-Refer to `docs/git.md` to understand how to interact with this repository with the
-`git` command-line tool. For example, how to format git commit messages.
+## Git Information
+
+### Staging and committing policy
+
+**DO NOT** stage or commit changes to git unless explicitly asked to do so.
+By default, all modifications must be left unstaged in the working directory.
+
+### Commit requirements
+
+Refer to `docs/git_commit.md` to understand how the requirements of running
+`git commit`, especially the expected commit message format.
