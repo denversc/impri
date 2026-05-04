@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-  private val driver = BrotherP300BTDriver()
+  private val driver = BrotherP300BTDriver(application)
   private val repository = LabelRepository(application)
 
   private val _status = MutableStateFlow("Ready to print")
