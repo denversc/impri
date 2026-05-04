@@ -9,16 +9,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -121,12 +128,12 @@ fun LabelPrinterApp(
   onPrintRequested:
     (String, Float?, VerticalAlignment, HorizontalAlignment, ColorMode, QrConfig) -> Unit,
 ) {
-  var text by remember { mutableStateOf("") }
-  var customFontSize by remember { mutableStateOf<Float?>(null) }
-  var verticalAlignment by remember { mutableStateOf(VerticalAlignment.CENTER) }
-  var horizontalAlignment by remember { mutableStateOf(HorizontalAlignment.CENTER) }
-  var colorMode by remember { mutableStateOf(ColorMode.NORMAL) }
-  var qrConfig by remember { mutableStateOf(QrConfig()) }
+  val text by viewModel.text.collectAsState()
+  val customFontSize by viewModel.customFontSize.collectAsState()
+  val verticalAlignment by viewModel.verticalAlignment.collectAsState()
+  val horizontalAlignment by viewModel.horizontalAlignment.collectAsState()
+  val colorMode by viewModel.colorMode.collectAsState()
+  val qrConfig by viewModel.qrConfig.collectAsState()
 
   var showFontSizeDialog by remember { mutableStateOf(false) }
   var showAlignmentDialog by remember { mutableStateOf(false) }
@@ -140,6 +147,7 @@ fun LabelPrinterApp(
 
   val status by viewModel.status.collectAsState()
   val history by viewModel.history.collectAsState()
+  val previewBitmap by viewModel.preview.collectAsState()
 
   val autoFontSize = remember(text) { viewModel.getAutoFontSize(text) }
   val currentFontSize = customFontSize ?: autoFontSize
@@ -151,7 +159,7 @@ fun LabelPrinterApp(
       initialIsAuto = customFontSize == null,
       onDismiss = { showFontSizeDialog = false },
       onConfirm = { size ->
-        customFontSize = size
+        viewModel.customFontSize.value = size
         showFontSizeDialog = false
       },
     )
@@ -162,7 +170,7 @@ fun LabelPrinterApp(
       currentAlignment = verticalAlignment,
       onDismiss = { showAlignmentDialog = false },
       onAlignmentSelected = { alignment ->
-        verticalAlignment = alignment
+        viewModel.verticalAlignment.value = alignment
         showAlignmentDialog = false
       },
     )
@@ -173,7 +181,7 @@ fun LabelPrinterApp(
       currentAlignment = horizontalAlignment,
       onDismiss = { showHorizontalAlignmentDialog = false },
       onAlignmentSelected = { alignment ->
-        horizontalAlignment = alignment
+        viewModel.horizontalAlignment.value = alignment
         showHorizontalAlignmentDialog = false
       },
     )
@@ -184,7 +192,7 @@ fun LabelPrinterApp(
       currentMode = colorMode,
       onDismiss = { showColorModeDialog = false },
       onModeSelected = { mode ->
-        colorMode = mode
+        viewModel.colorMode.value = mode
         showColorModeDialog = false
       },
     )
@@ -195,8 +203,8 @@ fun LabelPrinterApp(
       currentConfig = qrConfig,
       onDismiss = { showQrCodeDialog = false },
       onConfirm = { config ->
-        qrConfig = config
-        text += LabelBitmapGenerator.BARCODE_CHAR
+        viewModel.qrConfig.value = config
+        viewModel.text.value += LabelBitmapGenerator.BARCODE_CHAR
         showQrCodeDialog = false
       },
     )
@@ -206,7 +214,7 @@ fun LabelPrinterApp(
     DateDialog(
       onDismiss = { showDateDialog = false },
       onDateSelected = { selectedDate ->
-        text += selectedDate
+        viewModel.text.value += selectedDate
         showDateDialog = false
       },
     )
@@ -233,9 +241,40 @@ fun LabelPrinterApp(
     modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
+    // Label Preview Hero
+    Card(
+      modifier = Modifier.fillMaxWidth().height(56.dp),
+      shape = RoundedCornerShape(8.dp),
+      elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+      colors =
+        CardDefaults.cardColors(
+          containerColor = if (colorMode == ColorMode.INVERTED) Color.Black else Color.White
+        ),
+    ) {
+      Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
+        if (previewBitmap != null) {
+          Image(
+            bitmap = previewBitmap!!.asImageBitmap(),
+            contentDescription = "Label Preview",
+            modifier = Modifier.fillMaxHeight().horizontalScroll(rememberScrollState()),
+            contentScale = ContentScale.FillHeight,
+            filterQuality = androidx.compose.ui.graphics.FilterQuality.None,
+          )
+        } else {
+          Text(
+            "Preview will appear here",
+            color = Color.LightGray,
+            style = MaterialTheme.typography.bodyMedium,
+          )
+        }
+      }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
     OutlinedTextField(
       value = text,
-      onValueChange = { text = it },
+      onValueChange = { viewModel.text.value = it },
       label = { Text("Label Text") },
       modifier = Modifier.fillMaxWidth(),
       maxLines = 3,
@@ -247,7 +286,7 @@ fun LabelPrinterApp(
       onClick = {
         val barcodeChar = LabelBitmapGenerator.BARCODE_CHAR
         val count = text.count { it == barcodeChar }
-        val cleanText = text.replace(Regex("\\s*$barcodeChar\\s*"), "")
+        val cleanText = text.replace(barcodeChar.toString(), "")
         val trimmedText = text.trim()
 
         if (count == 0) {
@@ -379,7 +418,7 @@ fun LabelPrinterApp(
       items(history, key = { it.id }) { label ->
         HistoryItem(
           label = label,
-          onClick = { text = label.text },
+          onClick = { viewModel.text.value = label.text },
           onDelete = { viewModel.deleteLabel(label.id) },
         )
       }
