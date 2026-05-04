@@ -51,7 +51,7 @@ object LabelBitmapGenerator {
     colorMode: ColorMode = ColorMode.NORMAL,
     qrConfig: QrConfig = QrConfig(),
   ): Pair<Bitmap, Float> {
-    val cleanText = text.replace(Regex("\\s*$BARCODE_CHAR\\s*"), "")
+    val cleanText = text.replace(BARCODE_CHAR.toString(), "")
     // A 12mm tape only has a printable area of about 9mm (roughly 64 pixels)
     // centered on the 128-pixel print head.
     val maxPrintHeight = 64f
