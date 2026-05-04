@@ -5,11 +5,7 @@ plugins {
 
 android {
   namespace = "impri.app"
-  compileSdk {
-    version = release(36) {
-      minorApiLevel = 1
-    }
-  }
+  compileSdk { version = release(36) { minorApiLevel = 1 } }
 
   defaultConfig {
     applicationId = "impri.app"
@@ -31,9 +27,7 @@ android {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
-  buildFeatures {
-    compose = true
-  }
+  buildFeatures { compose = true }
 }
 
 dependencies {
