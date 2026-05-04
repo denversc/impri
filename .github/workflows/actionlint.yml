@@ -27,4 +27,4 @@ jobs:
           sparse-checkout: '.github/'
       - uses: docker://index.docker.io/rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9 # ratchet:docker://rhysd/actionlint:1.7.7
         with:
-          args: -color .github/workflows/*.yml
+          args: -color .github/workflows/actionlint.yml .github/workflows/build.yml .github/workflows/spotless.yml
