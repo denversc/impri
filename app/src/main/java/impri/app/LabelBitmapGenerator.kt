@@ -148,11 +148,7 @@ object LabelBitmapGenerator {
           for (y in 0 until qrSize) {
             val matrixX = x * mWidth / qrSize
             val matrixY = y * mHeight / qrSize
-            qrBitmap.setPixel(
-              x,
-              y,
-              if (bitMatrix[matrixX, matrixY]) textColor else backgroundColor,
-            )
+            qrBitmap.setPixel(x, y, if (bitMatrix[matrixX, matrixY]) textColor else backgroundColor)
           }
         }
       } catch (e: Exception) {
