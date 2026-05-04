@@ -1,0 +1,7 @@
+# -*- mode: zsh -*-
+
+# Identical to "say" but suppresses the trailing newline.
+
+emulate -L zsh
+
+builtin print -rn -- "$@"

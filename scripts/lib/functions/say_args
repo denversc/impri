@@ -1,0 +1,13 @@
+# -*- mode: zsh -*-
+
+# Prints a command and its arguments escaping whitespace in a manner that could
+# be copied-and-pasted into a zsh shell to run it.
+#
+# This function is intended to be used to print a command and its arguments to
+# stdout before actually running the command.
+
+emulate -L zsh
+
+autoload -Uz say
+
+say "${(q)@}"

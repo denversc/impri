@@ -1,0 +1,20 @@
+# -*- mode: zsh -*-
+
+# Identical to "say" but with "prompt expansion" enabled.
+#
+# WARNING: Avoid using "sayp" with strings whose contents are out of your
+# control, such as output from an external command. This is because the output
+# may coincidentally contain '%' characters that would unexpectedly be subject
+# to prompt expansion.
+#
+# Example:
+#   sayp "%F{red}ERROR:%f something went wrong"
+#
+# This example prints "ERROR: something went wrong" with the text "ERROR:" in
+# red.
+#
+# https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
+
+emulate -L zsh
+
+builtin print -rP -- "$@"

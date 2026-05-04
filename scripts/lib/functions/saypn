@@ -1,0 +1,24 @@
+# -*- mode: zsh -*-
+
+# Combines "sayp" with "sayn".
+#
+# This function is useful in combination with other "say" commands to apply
+# prompt expansion only on a _subset_ of the printed text, especially if some
+# of the text is out of the script's control, like output from an external
+# command.
+#
+# WARNING: Like with the "sayp" function, avoid using "saypn" with strings whose
+# contents are out of your control, such as output from an external command.
+#
+# Example:
+#   command_output=$(cat somefile.txt)
+#   saypn "The contents of %Ssomefile.txt%s are: "
+#   say "${command_output}"
+#
+# This example prints "The contents of somefile.txt are: ", followed by the
+# contents of the file, followed by a newline, with "somefile.txt" printed in
+# "standout" mode.
+
+emulate -L zsh
+
+builtin print -rPn -- "$@"

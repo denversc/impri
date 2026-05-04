@@ -1,0 +1,18 @@
+# -*- mode: zsh -*-
+
+# An "echo" replacement, with improved predictability and safety.
+#
+# Each argument is printed, separated by a space.
+#
+# This function is simply a shorthand for the following:
+#   builtin print -r -- [arguments]
+# This performs the same thing as a traditional "echo" command, but more
+# reliably, reducing the chances of errors. By specifying -r to "print", there
+# are no magical "escapes" done (e.g. "\n" prints "\n", not a newline
+# character). By specifying -- it avoids accidentally specifying a flag to
+# "print" when you just wanted to print a string that happens to start with the
+# "-" character.
+
+emulate -L zsh
+
+builtin print -r -- "$@"

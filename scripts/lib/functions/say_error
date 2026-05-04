@@ -1,0 +1,12 @@
+# -*- mode: zsh -*-
+
+# Prints an error message, prefixed by "ERROR:" printed in red.
+#
+# Each argument of this function makes up the error message.
+
+emulate -L zsh
+
+autoload -Uz say saypn
+
+saypn "%F{red}ERROR:%f "
+say "$@"
